@@ -26,10 +26,10 @@ function CowImageUpload({ onAnalysisComplete }) {
             const formData = new FormData();
             formData.append('image', selectedImage);
 
-            const response = await fetch('https://pashu-netra-backend.vercel.app/analyze-cow', {
-                method: 'POST',
-                body: formData
-            });
+           const response = await fetch('/api/analyze-cow', {
+    method: 'POST',
+    body: formData
+});
 
             const result = await response.json();
 
