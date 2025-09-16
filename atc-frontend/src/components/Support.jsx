@@ -145,7 +145,7 @@ const Support = ({ onBackToHome }) => {
                 <h2 className="text-xl font-bold text-gray-800 mb-4">📞 Contact Us</h2>
                 <div className="flex justify-center gap-6 text-gray-700">
                     <div className="flex items-center gap-2"><Mail size={18} /> support@atc-system.com</div>
-                    <div className="flex items-center gap-2"><Phone size={18} /> +1 (555) 123-4567</div>
+                    <div className="flex items-center gap-2"><Phone size={18} /> +91 82973 79000</div>
                 </div>
             </div>
 
