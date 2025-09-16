@@ -93,7 +93,7 @@ export default function Navbar({ currentPage, onNavigate }) {
                 <Logo onNavigate={onNavigate} />
 
                 {/* Desktop Menu */}
-                <div className="hidden md:flex items-center justify-center gap-2 flex-1">
+                <div className="hidden md:flex items-center justify-center gap-2 flex-2">
                     {navLinks.map((link) => (
                         <NavLink key={link.name} link={link} />
                     ))}
