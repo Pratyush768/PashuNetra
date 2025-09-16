@@ -1,10 +1,48 @@
 {
-  "name": "${PROJECT_NAME}",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "name": "sih2",
+  "version": "2.0.0",
+  "description": "Enhanced ATC (Animal Type Classification) analysis system with AI chatbot integration",
+  "main": "server.js",
+  "keywords": ["cattle", "analysis", "ai", "chatbot", "onnx", "yolo", "nodejs"],
+  "author": "Your Name",
+  "license": "MIT",
+  "private": true,
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
   },
-  "private": true
+  "scripts": {
+    "start": "node server.js",
+    "dev": "NODE_ENV=development nodemon server.js",
+    "server": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install:deps": "npm install",
+    "clean": "rm -rf node_modules package-lock.json",
+    "reinstall": "npm run clean && npm install",
+    "check:health": "curl -f http://localhost:3001/health || exit 1"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "express-rate-limit": "^7.1.5",
+    "dotenv": "^16.3.1",
+    "morgan": "^1.10.0",
+    "@google/generative-ai": "^0.2.1",
+    "jimp": "^1.6.0",
+    "multer": "^2.0.2",
+    "onnxruntime-node": "^1.22.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2",
+    "concurrently": "^8.2.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "your-repo-url"
+  },
+  "bugs": {
+    "url": "your-repo-url/issues"
+  },
+  "homepage": "your-repo-url#readme"
 }
