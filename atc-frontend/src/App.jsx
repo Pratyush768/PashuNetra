@@ -1,193 +1,352 @@
-import { useState, useEffect } from "react";
-import { UserButton, useUser, SignInButton } from "@clerk/clerk-react";
-import logoo from "../assets/logoo.jpg";
+import React, { useState } from 'react';
+import Navbar from "./components/Navbar";
+import Hero from "./components/Hero";
+import Features from "./components/Features";
+import HowItWorks from "./components/HowItWorks";
+import CTA from "./components/CTA";
+import Footer from "./components/Footer";
+import ATCReport from "./components/ATCReport";
+import Chatbot from "./components/Chatbot";
+import Support from "./components/Support.jsx";
 
-// Updated navigation links for multi-page system
-const navLinks = [
-    { name: "Upload & Analyze", page: "home" },
-    { name: "Detailed Report", page: "report" },
-    { name: "About ATC", page: "about" },
-    { name: "FutureFeatures", page: "FutureFeatures" },
+// INLINED FUTURE FEATURES COMPONENT
+function FutureFeatures({ onBackToHome }) {
+    const [activeFeature, setActiveFeature] = useState(null);
 
-];
+    const features = [
+        {
+            id: 1,
+            title: "Generative AI Veterinary Assistant",
+            icon: "🤖",
+            color: "emerald",
+            description: "AI-powered veterinary consultation and diagnosis system",
+            details: [
+                "AI chatbot trained on veterinary data for instant diagnosis suggestions",
+                "Symptom analysis from farmer descriptions or image uploads",
+                "Treatment recommendations and medication scheduling",
+                "Multi-language support for global accessibility",
+                "Integration with local veterinary databases"
+            ],
+            implementation: "Fine-tune LLM models (Llama 2/GPT) on veterinary datasets with RAG architecture",
+            timeline: "Phase 2 - 3-4 months",
+            tech: ["OpenAI GPT-4", "Llama 2", "Veterinary Knowledge Base", "React Chat UI"]
+        },
+        {
+            id: 2,
+            title: "Real-Time Disease Prediction System",
+            icon: "🔬",
+            color: "green",
+            description: "Advanced computer vision for early disease detection",
+            details: [
+                "Computer vision analysis of cattle facial patterns, gait, and posture changes",
+                "Early detection algorithms for diseases like mastitis, lameness, and respiratory issues",
+                "Behavioral anomaly detection using movement patterns and feeding habits",
+                "Real-time health monitoring with instant alerts",
+                "Integration with existing ATC classification pipeline"
+            ],
+            implementation: "Use your existing image processing pipeline + behavioral analysis models",
+            timeline: "Phase 2 - 4-5 months",
+            tech: ["Computer Vision", "YOLO Models", "Behavioral Analysis", "Real-time Processing"]
+        },
+        {
+            id: 3,
+            title: "Predictive Analytics Dashboard",
+            icon: "📊",
+            color: "teal",
+            description: "Advanced forecasting for optimal farm management",
+            details: [
+                "Breeding cycle optimization - predict optimal mating times",
+                "Milk yield forecasting using health and environmental data",
+                "Calving date predictions with 95% accuracy",
+                "Feed intake optimization based on individual cattle needs",
+                "Economic impact analysis and ROI predictions"
+            ],
+            implementation: "Add time-series forecasting models to your existing system",
+            timeline: "Phase 3 - 2-3 months",
+            tech: ["Time-series Analysis", "Machine Learning", "Data Analytics", "Predictive Models"]
+        }
+    ];
 
-// Updated Logo component with navigation
-const Logo = ({ onNavigate }) => (
-    <div
-        onClick={() => onNavigate('home')}
-        className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
-    >
-        <div className="absolute left-1 top-1/2 transform -translate-y-1/2 w-[150px] h-19">
-            <img src={logoo} alt="Logo" className="max-h-full object-contain" />
-        </div>
-        {/* <span className="text-xl font-bold text-gray-900 dark:text-gray-100">
-      PashuNetra
-    </span> */}
-    </div>
-);
-
-export default function Navbar({ currentPage, onNavigate }) {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const { isSignedIn } = useUser();
-
-    // Effect to close menu on escape key press
-    useEffect(() => {
-        const handleKeyDown = (e) => {
-            if (e.key === "Escape") {
-                setIsMenuOpen(false);
-            }
-        };
-        document.addEventListener("keydown", handleKeyDown);
-        return () => document.removeEventListener("keydown", handleKeyDown);
-    }, []);
-
-    const NavLink = ({ link }) => (
-        <button
-            onClick={() => {
-                onNavigate(link.page);
-                setIsMenuOpen(false);
-            }}
-            className={`relative group font-medium px-4 py-2 rounded-lg transition-all duration-300 ${
-                currentPage === link.page
-                    ? "text-green-600 bg-green-50 dark:text-green-500 dark:bg-green-900/30"
-                    : "text-gray-700 dark:text-gray-300 hover:text-green-600 hover:bg-green-50/50 dark:hover:text-green-500"
-            }`}
-        >
-            {link.name}
-            <span
-                className={`absolute bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-green-600 transition-all duration-300 ease-out
-                ${currentPage === link.page ? "w-3/4" : "group-hover:w-1/2"}`}
-            />
-        </button>
-    );
-
-
-    const AuthButtons = ({ isMobile = false }) => (
-        <div className={`flex items-center gap-4 ${isMobile ? "flex-col w-full" : ""}`}>
-
-            <button
-                onClick={() => onNavigate("support")}
-                className="px-4 py-2 text-sm font-medium transition rounded-full text-gray-700 dark:text-gray-300 hover:bg-gray-200/60 dark:hover:bg-gray-700/60"
-            >
-                Support
-            </button>
-            {isSignedIn ? (
-                <div className="flex items-center gap-3">
-                    <UserButton afterSignOutUrl="/" />
-                    <span className="text-sm text-gray-600 dark:text-gray-400 hidden sm:block">
-                        Welcome back!
-                    </span>
-                </div>
-            ) : (
-                <SignInButton mode="modal">
-                    <button
-                        onClick={() => isMobile && setIsMenuOpen(false)}
-                        className="px-5 py-2 font-medium text-white transition bg-green-600 rounded-full w-full sm:w-auto hover:bg-green-700 shadow-md hover:shadow-lg transform hover:scale-105 active:scale-95"
-                    >
-                        Login / Sign Up
-                    </button>
-                </SignInButton>
-            )}
-        </div>
-    );
+    const colorSchemes = {
+        emerald: {
+            bg: 'from-emerald-600 via-green-600 to-teal-600',
+            light: 'from-emerald-50 to-green-100',
+            border: 'border-emerald-200',
+            text: 'text-emerald-700',
+            accent: 'text-emerald-600'
+        },
+        green: {
+            bg: 'from-green-600 via-emerald-600 to-teal-600',
+            light: 'from-green-50 to-emerald-100',
+            border: 'border-green-200',
+            text: 'text-green-700',
+            accent: 'text-green-600'
+        },
+        teal: {
+            bg: 'from-teal-600 via-green-600 to-emerald-600',
+            light: 'from-teal-50 to-green-100',
+            border: 'border-teal-200',
+            text: 'text-teal-700',
+            accent: 'text-teal-600'
+        }
+    };
 
     return (
-        <>
-            <nav className="fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-6xl bg-white/50 dark:bg-gray-900/50 backdrop-blur-lg text-gray-900 dark:text-gray-100 z-50 flex items-center justify-between px-6 py-3 rounded-full shadow-md border border-gray-200/50 dark:border-gray-700/50">
-                <Logo onNavigate={onNavigate} />
+        <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50">
+            {/* Header */}
+            <div className="bg-white/95 backdrop-blur-xl shadow-2xl border-b border-emerald-200/50 sticky top-0 z-40">
+                <div className="max-w-7xl mx-auto px-8 py-6">
+                    <div className="flex items-center justify-between">
+                        <button
+                            onClick={() => onBackToHome()}
+                            className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-emerald-600 via-green-600 to-teal-600 text-white rounded-2xl hover:from-emerald-700 hover:to-teal-700 transform hover:scale-110 transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-emerald-500/50 font-bold gap-3 group text-base"
+                        >
+                            <svg className="w-5 h-5 group-hover:-translate-x-2 transition-transform duration-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
+                            </svg>
+                            Back to Dashboard
+                        </button>
 
-                {/* Desktop Menu */}
-                <div className="hidden md:flex items-center justify-center gap-2 flex-2">
-                    {navLinks.map((link) => (
-                        <NavLink key={link.name} link={link} />
-                    ))}
-                </div>
+                        <div className="text-center">
+                            <h1 className="text-4xl font-serif font-bold bg-gradient-to-r from-emerald-800 via-green-700 to-teal-800 bg-clip-text text-transparent drop-shadow-lg">
+                                🚀 Future Innovation Hub
+                            </h1>
+                            <p className="text-green-600 font-semibold mt-2">Next-Generation ATC Cattle Management Features</p>
+                        </div>
 
-                {/* Desktop Buttons */}
-                <div className="hidden md:flex">
-                    <AuthButtons />
-                </div>
-
-                {/* Mobile Menu Toggle */}
-                <div className="flex items-center gap-4 md:hidden">
-                    {isSignedIn && <UserButton />}
-                    <button
-                        onClick={() => setIsMenuOpen(true)}
-                        aria-label="Open menu"
-                        aria-expanded={isMenuOpen}
-                        aria-controls="mobile-menu"
-                        className="p-2 rounded-lg hover:bg-gray-200/60 dark:hover:bg-gray-700/60 transition-colors"
-                    >
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
-                        </svg>
-                    </button>
-                </div>
-            </nav>
-
-            {/* Mobile Slide-In Menu & Overlay */}
-            <div
-                id="mobile-menu"
-                className={`fixed inset-0 z-50 md:hidden transition-all duration-300 ease-in-out ${
-                    isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
-                }`}
-            >
-                {/* Overlay */}
-                <div
-                    className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-                    onClick={() => setIsMenuOpen(false)}
-                />
-
-                {/* Menu Content */}
-                <div
-                    className={`fixed top-0 left-0 w-4/5 max-w-sm h-full bg-white dark:bg-gray-900 
-                        flex flex-col justify-center gap-8 p-8
-                        transition-transform duration-500 ease-in-out shadow-2xl
-                        ${isMenuOpen ? "translate-x-0" : "-translate-x-full"}`}
-                >
-                    {/* Close Button */}
-                    <button
-                        className="absolute top-5 right-5 text-3xl text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
-                        onClick={() => setIsMenuOpen(false)}
-                        aria-label="Close menu"
-                    >
-                        &times;
-                    </button>
-
-                    {/* Logo in mobile menu */}
-                    <div className="absolute top-5 left-5">
-                        <Logo onNavigate={onNavigate} />
-                    </div>
-
-                    {/* Navigation Links */}
-                    <div className="flex flex-col items-center gap-6 text-xl mt-8">
-                        {navLinks.map((link) => (
-                            <button
-                                key={link.name}
-                                onClick={() => {
-                                    onNavigate(link.page);
-                                    setIsMenuOpen(false);
-                                }}
-                                className={`py-3 px-6 rounded-lg transition-all duration-200 ${
-                                    currentPage === link.page
-                                        ? "text-green-600 bg-green-50 dark:text-green-500 dark:bg-green-900/30"
-                                        : "text-gray-700 dark:text-gray-300 hover:text-green-600 hover:bg-green-50/50"
-                                }`}
-                            >
-                                {link.name}
-                            </button>
-                        ))}
-                    </div>
-
-                    {/* Auth Buttons */}
-                    <div className="absolute bottom-8 w-full px-8">
-                        <AuthButtons isMobile={true} />
+                        <div className="bg-gradient-to-r from-emerald-100 via-green-100 to-teal-100 px-6 py-3 rounded-2xl border border-emerald-300/50 shadow-xl">
+                            <span className="text-emerald-800 font-bold flex items-center gap-3 text-lg">
+                                <div className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse shadow-lg shadow-emerald-500/50"></div>
+                                Coming Soon
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
+            {/* Main Content */}
+            <div className="max-w-7xl mx-auto px-8 py-12">
+                {/* Feature Cards Grid */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+                    {features.map((feature) => {
+                        const scheme = colorSchemes[feature.color];
+                        const isActive = activeFeature === feature.id;
 
-            {/* Page content offset for fixed navbar */}
-            <div className="h-20"></div> {/* Spacer for fixed navbar */}
-        </>
+                        return (
+                            <div
+                                key={feature.id}
+                                className={`bg-gradient-to-br ${scheme.light} backdrop-blur-xl p-8 rounded-3xl shadow-2xl border ${scheme.border} hover:shadow-3xl hover:shadow-emerald-500/20 transition-all duration-700 cursor-pointer transform hover:scale-105 ${isActive ? 'ring-4 ring-emerald-500/50 scale-105' : ''}`}
+                                onClick={() => setActiveFeature(isActive ? null : feature.id)}
+                            >
+                                <div className="text-center mb-6">
+                                    <div className="text-6xl mb-4 transform hover:scale-110 transition-transform duration-300">
+                                        {feature.icon}
+                                    </div>
+                                    <h3 className={`text-2xl font-serif font-bold ${scheme.text} mb-3 hover:animate-pulse`}>
+                                        {feature.title}
+                                    </h3>
+                                    <p className={`${scheme.accent} font-semibold text-base`}>
+                                        {feature.description}
+                                    </p>
+                                </div>
+                                {/* Quick Stats */}
+                                <div className="grid grid-cols-2 gap-4 mb-6">
+                                    <div className={`text-center p-3 bg-white/70 rounded-2xl border ${scheme.border}`}>
+                                        <div className={`text-2xl font-bold ${scheme.accent} drop-shadow-lg`}>
+                                            {feature.tech.length}+
+                                        </div>
+                                        <div className={`text-sm ${scheme.text} font-semibold`}>Technologies</div>
+                                    </div>
+                                    <div className={`text-center p-3 bg-white/70 rounded-2xl border ${scheme.border}`}>
+                                        <div className={`text-2xl font-bold ${scheme.accent} drop-shadow-lg`}>
+                                            {feature.details.length}
+                                        </div>
+                                        <div className={`text-sm ${scheme.text} font-semibold`}>Features</div>
+                                    </div>
+                                </div>
+                                <button className={`w-full py-3 bg-gradient-to-r ${scheme.bg} text-white rounded-2xl font-bold hover:shadow-2xl transform hover:scale-105 transition-all duration-300 shadow-lg`}>
+                                    {isActive ? 'Collapse Details' : 'Explore Feature'}
+                                </button>
+                                {isActive && (
+                                    <div className="mt-8 space-y-6 animate-fade-in">
+                                        {/* Feature Details */}
+                                        <div>
+                                            <h4 className={`text-xl font-bold ${scheme.text} mb-4 flex items-center gap-2`}>
+                                                📋 Key Features
+                                            </h4>
+                                            <ul className="space-y-3">
+                                                {feature.details.map((detail, index) => (
+                                                    <li key={index} className={`flex items-start gap-3 ${scheme.text}`}>
+                                                        <div className={`w-2 h-2 ${scheme.bg} rounded-full mt-2 shadow-lg`}></div>
+                                                        <span className="font-medium">{detail}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                        {/* Implementation */}
+                                        <div className={`p-4 bg-white/70 rounded-2xl border ${scheme.border}`}>
+                                            <h4 className={`text-lg font-bold ${scheme.text} mb-2 flex items-center gap-2`}>
+                                                ⚙️ Implementation Plan
+                                            </h4>
+                                            <p className={`${scheme.accent} font-medium`}>{feature.implementation}</p>
+                                        </div>
+                                        {/* Timeline & Tech Stack */}
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div className={`p-4 bg-white/70 rounded-2xl border ${scheme.border}`}>
+                                                <h4 className={`text-lg font-bold ${scheme.text} mb-2`}>⏱️ Timeline</h4>
+                                                <p className={`${scheme.accent} font-semibold`}>{feature.timeline}</p>
+                                            </div>
+                                            <div className={`p-4 bg-white/70 rounded-2xl border ${scheme.border}`}>
+                                                <h4 className={`text-lg font-bold ${scheme.text} mb-2`}>🛠️ Tech Stack</h4>
+                                                <div className="flex flex-wrap gap-2">
+                                                    {feature.tech.map((tech, index) => (
+                                                        <span key={index} className={`px-3 py-1 bg-gradient-to-r ${scheme.bg} text-white text-xs font-bold rounded-full shadow-lg`}>
+                                                            {tech}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
+                </div>
+                {/* Development Roadmap */}
+                <div className="bg-gradient-to-br from-white via-emerald-50/30 to-green-50/50 backdrop-blur-xl p-8 rounded-3xl shadow-2xl border border-emerald-200/50 mb-8">
+                    <h2 className="text-3xl font-serif font-bold text-center bg-gradient-to-r from-emerald-700 via-green-600 to-teal-500 bg-clip-text text-transparent mb-8 hover:animate-pulse">
+                        🗺️ ATC Development Roadmap
+                    </h2>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div className="text-center p-6 bg-gradient-to-r from-emerald-100 to-green-100 rounded-2xl border border-emerald-200 shadow-lg">
+                            <div className="text-4xl font-bold text-emerald-600 mb-2">Phase 1</div>
+                            <div className="text-emerald-700 font-semibold mb-3">Foundation (Current)</div>
+                            <ul className="text-sm text-emerald-600 space-y-1">
+                                <li>✅ ATC Classification System</li>
+                                <li>✅ Premium Dashboard UI</li>
+                                <li>✅ Report Generation</li>
+                                <li>✅ Computer Vision Pipeline</li>
+                            </ul>
+                        </div>
+                        <div className="text-center p-6 bg-gradient-to-r from-green-100 to-teal-100 rounded-2xl border border-green-200 shadow-lg">
+                            <div className="text-4xl font-bold text-green-600 mb-2">Phase 2</div>
+                            <div className="text-green-700 font-semibold mb-3">AI Integration (Next)</div>
+                            <ul className="text-sm text-green-600 space-y-1">
+                                <li>🔄 Veterinary AI Assistant</li>
+                                <li>🔄 Disease Prediction System</li>
+                                <li>🔄 Advanced Analytics</li>
+                                <li>🔄 Health Monitoring</li>
+                            </ul>
+                        </div>
+                        <div className="text-center p-6 bg-gradient-to-r from-teal-100 to-emerald-100 rounded-2xl border border-teal-200 shadow-lg">
+                            <div className="text-4xl font-bold text-teal-600 mb-2">Phase 3</div>
+                            <div className="text-teal-700 font-semibold mb-3">Advanced Features</div>
+                            <ul className="text-sm text-teal-600 space-y-1">
+                                <li>⏳ Predictive Dashboard</li>
+                                <li>⏳ Farm Optimization</li>
+                                <li>⏳ Multi-Farm Network</li>
+                                <li>⏳ Mobile Integration</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {/* Call to Action */}
+                <div className="text-center bg-gradient-to-r from-emerald-600 via-green-600 to-teal-600 p-8 rounded-3xl shadow-2xl text-white">
+                    <h3 className="text-3xl font-bold mb-4">🎯 Ready to Revolutionize Cattle Management?</h3>
+                    <p className="text-xl mb-6 opacity-90">
+                        Join us in building the future of AI-powered ATC evaluation and cattle health monitoring
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                        <button className="px-8 py-4 bg-white text-emerald-600 rounded-2xl font-bold hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
+                            📧 Get Development Updates
+                        </button>
+                        <button className="px-8 py-4 bg-emerald-800 text-white rounded-2xl font-bold hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
+                            🚀 Start Implementation
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {/* Custom Animations */}
+            <style jsx>{`
+                @keyframes fade-in {
+                    from {
+                        opacity: 0;
+                        transform: translateY(20px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+                .animate-fade-in {
+                    animation: fade-in 0.6s ease-out forwards;
+                }
+            `}</style>
+        </div>
+    );
+}
+
+export default function App() {
+    const [currentPage, setCurrentPage] = useState('home');
+    const renderPage = () => {
+        switch (currentPage) {
+            case 'home':
+                return (
+                    <>
+                        <Hero onViewReport={() => setCurrentPage('report')} />
+                        <Features />
+                        <HowItWorks />
+                        <CTA />
+                    </>
+                );
+            case "FutureFeatures":
+                return <FutureFeatures onBackToHome={() => setCurrentPage("home")} />;
+            case 'report':
+                return <ATCReport onBackToHome={() => setCurrentPage('home')} />;
+            case 'about':
+                return (
+                    <div className="min-h-screen bg-gray-50 py-16">
+                        <div className="max-w-4xl mx-auto px-4">
+                            {/* ... your about code ... */}
+                        </div>
+                    </div>
+                );
+            case 'support':
+                return <Support onBackToHome={() => setCurrentPage('home')} />;
+            case 'contact':
+                return (
+                    <div className="min-h-screen bg-gray-50 py-16">
+                        <div className="max-w-4xl mx-auto px-4">
+                            {/* ... your contact code ... */}
+                        </div>
+                    </div>
+                );
+            default:
+                return (
+                    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                        <div className="text-center">
+                            <h1 className="text-2xl font-bold text-gray-900 mb-4">Page Not Found</h1>
+                            <button
+                                onClick={() => setCurrentPage('home')}
+                                className="px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
+                            >
+                                Go Home
+                            </button>
+                        </div>
+                    </div>
+                );
+        }
+    };
+    return (
+        <div className="font-sans">
+            <Navbar
+                currentPage={currentPage}
+                onNavigate={setCurrentPage}
+            />
+            {renderPage()}
+            <Footer />
+            {/* ✅ Floating AI Chatbot - appears on all pages */}
+            <Chatbot />
+        </div>
     );
 }
