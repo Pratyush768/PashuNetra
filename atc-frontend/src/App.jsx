@@ -7,6 +7,7 @@ import CTA from "./components/CTA";
 import Footer from "./components/Footer";
 import ATCReport from "./components/ATCReport";
 import Chatbot from "./components/Chatbot"; // ✅ Add this import
+import Support from "./components/Support.jsx";
 
 export default function App() {
     const [currentPage, setCurrentPage] = useState('home');
@@ -68,6 +69,8 @@ export default function App() {
                         </div>
                     </div>
                 );
+            case 'support':
+                return <Support onBackToHome={() => setCurrentPage('home')} />;
             case 'contact':
                 return (
                     <div className="min-h-screen bg-gray-50 py-16">

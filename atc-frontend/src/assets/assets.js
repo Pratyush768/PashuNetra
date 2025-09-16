@@ -3,9 +3,11 @@ import exclusiveOfferCardImg1 from "./exclusiveOfferCardImg1.png";
 import exclusiveOfferCardImg2 from "./exclusiveOfferCardImg2.png";
 import exclusiveOfferCardImg3 from "./exclusiveOfferCardImg3.png";
 import logo3 from "./logo3.svg"
+import logoo from "./logoo.jpg"
 export const assets = {
     arrowIcon,
-    logo3
+    logo3,
+    logoo
 }
 
 export const featuresData = [

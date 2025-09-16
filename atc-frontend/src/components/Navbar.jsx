@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { UserButton, useUser, SignInButton } from "@clerk/clerk-react";
+import logoo from "../assets/logoo.jpg";
 
 // Updated navigation links for multi-page system
 const navLinks = [
@@ -14,16 +15,12 @@ const Logo = ({ onNavigate }) => (
         onClick={() => onNavigate('home')}
         className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
     >
-        <svg width="28" height="28" viewBox="0 0 32 32" fill="none" className="text-green-600">
-            {/* Updated to cow silhouette for ATC system */}
-            <path
-                fill="currentColor"
-                d="M8 18c-2 0-3-2-3-3s1-3 3-3c1 0 2 0 2 1V11c0-3 2-5 5-5h8c3 0 5 2 5 5v2c1-1 1-1 2-1c2 0 3 2 3 3s-1 3-3 3c-1 0-1 0-2-1v3c0 2-2 3-3 3h-2v2c0 1-1 2-2 2s-2-1-2-2v-2h-3v2c0 1-1 2-2 2s-2-1-2-2v-2h-3c-2 0-3-1-3-3v-2c-1 1-1 1-2 1z"
-            />
-            <circle cx="18" cy="10" r="1" fill="currentColor"/>
-            <circle cx="22" cy="10" r="1" fill="currentColor"/>
-        </svg>
-        <span className="text-xl font-bold text-gray-900 dark:text-gray-100">PashuNetra</span>
+        <div className="absolute left-6 top-1/2 transform -translate-y-1/2 w-[150px] h-19">
+            <img src={logoo} alt="Logo" className="max-h-full object-contain" />
+        </div>
+        {/* <span className="text-xl font-bold text-gray-900 dark:text-gray-100">
+      PashuNetra
+    </span> */}
     </div>
 );
 
@@ -64,7 +61,10 @@ export default function Navbar({ currentPage, onNavigate }) {
 
     const AuthButtons = ({ isMobile = false }) => (
         <div className={`flex items-center gap-4 ${isMobile ? "flex-col w-full" : ""}`}>
-            <button className="px-4 py-2 text-sm font-medium transition rounded-full text-gray-700 dark:text-gray-300 hover:bg-gray-200/60 dark:hover:bg-gray-700/60">
+            <button
+                onClick={() => onNavigate("support")}
+                className="px-4 py-2 text-sm font-medium transition rounded-full text-gray-700 dark:text-gray-300 hover:bg-gray-200/60 dark:hover:bg-gray-700/60"
+            >
                 Support
             </button>
             {isSignedIn ? (
